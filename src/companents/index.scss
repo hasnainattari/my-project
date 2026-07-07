@@ -1,0 +1,71 @@
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 1em;
+    border-bottom: 1px solid #dadada;
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1em;
+    }
+}
+
+.pollingForm {
+    padding: 1em;
+    // background-color: red;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+    border: 1px solid #dadada;
+    border-radius: 1em;
+    margin: 1em;
+
+    .questionInput {
+        grid-column: span 2;
+    }
+}
+
+.singlePoll {
+    margin: 1em;
+    border: 1px solid #dadada;
+    border-radius: 1em;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    b {
+        color: #909090;
+        width: 100%;
+        text-align: right;
+        font-size: 0.8em;
+    }
+
+    h5 {
+        color: #909090;
+        font-size: 0.8em;
+    }
+}
+
+.antd-progress {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #F0F0F0;
+    background-color: #F0F0F0;
+    border-radius: 1em;
+    padding: 0.5em;
+    gap: 0.3em;
+    cursor: pointer;
+}
+
+.ant-progress-rail {
+    background-color: #F0F0F0 !important;
+}
+
+.ant-progress-body {
+    width: 100% !important;
+}
