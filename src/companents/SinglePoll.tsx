@@ -23,6 +23,10 @@ const SinglePoll = ({ data, getPolls }: any) => {
 
     const handleOptionClick = async (option: string, pollId: string) => {
         const userEmail = currentUser?.email
+        if (!userEmail) {
+            message.error("Please login to vote")
+            return
+        }
 
         const docRef = doc(db, "polls", pollId);
         const docSnap = await getDoc(docRef);
@@ -80,7 +84,7 @@ const SinglePoll = ({ data, getPolls }: any) => {
 
             <h5>{moment(data.createdAt).fromNow()}</h5>
 
-            {currentUser.email === data.userEmail ? <AntdButton
+            {currentUser?.email === data.userEmail ? <AntdButton
                 text="Delete"
                 onClick={() => handleDelete(data.id)}
                 color="danger"

@@ -47,7 +47,7 @@ const AddPollform = () => {
                 option_2: option_2,
                 option_3: option_3,
                 option_4: option_4,
-                userEmail: currentUser.email,
+                userEmail: currentUser?.email || "",
                 createdAt: new Date().getTime(),
                 opt_1_votes: [],
                 opt_2_votes: [],
