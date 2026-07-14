@@ -1,278 +1,329 @@
-// ---------- Header ----------
-.header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em 1.5em;
-  background: var(--surface);
-  border-bottom: 2px solid var(--ink);
+// ----- Shared palette (matches the brand mark) -----
+$ink: #1c2438;
+$paper: #eef0ea;
+$accent: #b23a2e;
+$border: #dadada;
+$muted: #8a8f98;
+$bg-soft: #f6f6f3;
 
-  .brand {
+// ===== Header =====
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75em;
+    padding: 0.9em 1.5em;
+    border-bottom: 1px solid $border;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.6em;
+
+        .brand-mark {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 1.15em;
+            color: $ink;
+            letter-spacing: 0.02em;
+        }
+
+        .tag {
+            font-size: 0.7em;
+            color: $accent;
+            border: 1px solid $accent;
+            border-radius: 999px;
+            padding: 0.15em 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+    }
+
+    .who {
+        display: flex;
+        align-items: center;
+        gap: 0.75em;
+
+        .email-chip {
+            font-size: 0.85em;
+            color: $muted;
+            background: $bg-soft;
+            padding: 0.35em 0.9em;
+            border-radius: 999px;
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        button {
+            width: auto !important;
+        }
+    }
+}
+
+// ===== New poll form =====
+.pollingForm {
+    padding: 1.5em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+    border: 1px solid $border;
+    border-radius: 1em;
+    margin: 1.5em;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    h2 {
+        grid-column: span 2;
+        font-size: 1.2em;
+        color: $ink;
+        margin-bottom: 0.2em;
+    }
+
+    .questionInput {
+        grid-column: span 2;
+    }
+
+    button {
+        grid-column: span 2;
+        margin-top: 0.3em;
+    }
+}
+
+// ===== Poll (ticket-stub) card =====
+.singlePoll {
+    margin: 1.5em;
+    border: 1px solid $border;
+    border-radius: 1em;
+    padding: 1.25em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.15s ease;
+
+    &:hover {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .stub-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1em;
+
+        .question {
+            margin: 0;
+            font-size: 1.05em;
+            font-weight: 600;
+            color: $ink;
+            line-height: 1.4;
+        }
+
+        b {
+            color: $muted;
+            font-weight: 500;
+            text-align: right;
+            font-size: 0.8em;
+            white-space: nowrap;
+        }
+    }
+
+    .perforation {
+        width: 100%;
+        border: none;
+        border-top: 2px dashed $border;
+        margin: 0;
+    }
+
+    .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6em;
+    }
+
+    .stub-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1em;
+        flex-wrap: wrap;
+
+        h5 {
+            color: $muted;
+            font-weight: 400;
+            font-size: 0.8em;
+            margin: 0;
+        }
+
+        button {
+            width: auto !important;
+        }
+    }
+}
+
+// ===== Progress / option row =====
+.antd-progress {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.6em;
+    border: 1px solid $border;
+    background-color: $bg-soft;
+    border-radius: 0.8em;
+    padding: 0.6em 0.9em;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 
-    .brand-mark {
-      width: 30px;
-      height: 30px;
-      flex-shrink: 0;
+    &:hover {
+        border-color: darken($border, 15%);
     }
 
-    h3 {
-      font-size: 1.15em;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+    &.voted {
+        border-color: $accent;
+        background-color: rgba(178, 58, 46, 0.05);
     }
 
-    span.tag {
-      font-family: var(--font-mono);
-      font-size: 0.65em;
-      color: var(--stamp);
-      border: 1px solid var(--stamp);
-      border-radius: 999px;
-      padding: 0.15em 0.6em;
-      margin-left: 0.4em;
-      letter-spacing: 0.04em;
-    }
-  }
-
-  .who {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1em;
-
-    .email-chip {
-      font-family: var(--font-mono);
-      font-size: 0.8em;
-      color: var(--ink-soft);
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 0.35em 0.9em;
+    &.disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
     }
 
-    button {
-      width: auto !important;
-    }
-  }
-}
-
-// ---------- New poll (ballot) form ----------
-.pollingForm {
-  position: relative;
-  padding: 1.75em;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1em;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 0.5em;
-  margin: 1.5em;
-  max-width: 900px;
-  margin-inline: auto;
-  margin-top: 1.5em;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--stamp);
-    border-radius: 0.5em 0.5em 0 0;
-  }
-
-  h2 {
-    grid-column: span 2;
-    font-size: 1.3em;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    margin-bottom: 0.15em;
-
-    &::before {
-      content: "";
-      display: inline-block;
-      width: 0.55em;
-      height: 0.55em;
-      background: var(--stamp);
-      border-radius: 50%;
-    }
-  }
-
-  .questionInput {
-    grid-column: span 2;
-  }
-
-  > button, > .ant-btn {
-    grid-column: span 2;
-  }
-}
-
-// ---------- Ballot stub (single poll) ----------
-.singlePoll {
-  position: relative;
-  margin: 1.25em;
-  max-width: 900px;
-  margin-inline: auto;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 0.5em;
-  padding: 1.5em 1.5em 1.25em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9em;
-
-  .stub-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1em;
-
-    p.question {
-      font-family: var(--font-display);
-      font-weight: 600;
-      font-size: 1.1em;
-      color: var(--ink);
-      flex: 1;
+    .stamp-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: $ink;
+        flex-shrink: 0;
     }
 
-    b {
-      font-family: var(--font-mono);
-      color: var(--muted);
-      font-size: 0.75em;
-      font-weight: 400;
-      white-space: nowrap;
-    }
-  }
-
-  .perforation {
-    border: none;
-    border-top: 2px dashed var(--line);
-    margin: 0.2em 0 0.4em;
-  }
-
-  .stub-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.3em;
-
-    h5 {
-      font-family: var(--font-mono);
-      color: var(--muted);
-      font-size: 0.75em;
-      font-weight: 400;
+    &.voted .stamp-dot {
+        background: $accent;
     }
 
-    button {
-      width: auto !important;
+    .progress-body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3em;
+
+        p {
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 0.75em;
+
+            .option-text {
+                font-size: 0.95em;
+                color: $ink;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .pct {
+                font-size: 0.75em;
+                color: $muted;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+        }
     }
-  }
-}
 
-.antd-progress {
-  display: flex;
-  align-items: center;
-  gap: 0.9em;
-  border: 1px solid var(--line);
-  background: var(--paper);
-  border-radius: 0.4em;
-  padding: 0.55em 0.9em;
-  cursor: pointer;
-  transition: border-color 0.15s ease, background 0.15s ease;
-
-  &:hover {
-    border-color: var(--stamp);
-    background: var(--stamp-wash);
-  }
-
-  &.voted {
-    border-color: var(--gold);
-    background: var(--gold-wash);
-  }
-
-  .stamp-dot {
-    flex-shrink: 0;
-    width: 1.1em;
-    height: 1.1em;
-    border-radius: 50%;
-    border: 2px solid var(--ink-soft);
-    background: transparent;
-    transition: background 0.15s ease, border-color 0.15s ease;
-  }
-
-  &.voted .stamp-dot {
-    background: var(--stamp);
-    border-color: var(--stamp);
-  }
-
-  .progress-body {
-    flex: 1;
-
-    p {
-      font-family: var(--font-body);
-      font-size: 0.85em;
-      color: var(--ink);
-      margin-bottom: 0.3em;
-      display: flex;
-      justify-content: space-between;
-
-      .pct {
-        font-family: var(--font-mono);
-        color: var(--muted);
-      }
+    .voted-badge {
+        position: absolute;
+        top: -0.6em;
+        right: 0.8em;
+        background: $accent;
+        color: #fff;
+        font-size: 0.65em;
+        padding: 0.15em 0.6em;
+        border-radius: 999px;
+        letter-spacing: 0.02em;
     }
-  }
 }
 
 .ant-progress-rail {
-  background-color: var(--line) !important;
-}
-
-.ant-progress-bg {
-  background: var(--ink) !important;
-}
-
-.voted .ant-progress-bg {
-  background: var(--stamp) !important;
+    background-color: #e2e2df !important;
 }
 
 .ant-progress-body {
-  width: 100% !important;
+    width: 100% !important;
 }
 
-.ant-progress-text {
-  font-family: var(--font-mono) !important;
+.ant-progress-bg {
+    // never let a bar visually spill past its own track
+    max-width: 100% !important;
 }
 
-// Buttons everywhere, restyled off the antd default
-.ant-btn.ant-btn-color-primary.ant-btn-variant-solid {
-  font-family: var(--font-body);
-  font-weight: 500;
-  background: var(--ink) !important;
-  border: none !important;
-  border-radius: 0.35em;
-  height: 2.5em;
+// ===== Responsive =====
+@media (max-width: 640px) {
+    .header {
+        padding: 0.75em 1em;
 
-  &:hover {
-    background: var(--stamp) !important;
-  }
-}
+        .brand h3 {
+            font-size: 1em;
+        }
 
-.ant-btn.ant-btn-color-danger.ant-btn-variant-solid {
-  font-family: var(--font-body);
-  font-weight: 500;
-  background: var(--surface) !important;
-  color: var(--stamp) !important;
-  border: 1px solid var(--stamp) !important;
-  border-radius: 0.35em;
-  height: 2.5em;
+        .who .email-chip {
+            max-width: 140px;
+        }
+    }
 
-  &:hover {
-    background: var(--stamp-wash) !important;
-  }
+    .pollingForm {
+        margin: 1em;
+        padding: 1em;
+        grid-template-columns: 1fr;
+
+        h2 {
+            grid-column: span 1;
+        }
+
+        .questionInput {
+            grid-column: span 1;
+        }
+
+        button {
+            grid-column: span 1;
+        }
+    }
+
+    .singlePoll {
+        margin: 1em;
+        padding: 1em;
+
+        .stub-top {
+            flex-direction: column;
+            gap: 0.3em;
+
+            b {
+                text-align: left;
+            }
+        }
+
+        .stub-footer {
+            flex-direction: column;
+            align-items: flex-start;
+
+            button {
+                width: 100% !important;
+            }
+        }
+    }
 }

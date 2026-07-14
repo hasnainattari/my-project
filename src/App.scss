@@ -1,75 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-
-:root {
-  --ink: #1c2438;
-  --ink-soft: #3a4258;
-  --muted: #6b7280;
-  --paper: #eef0ea;
-  --surface: #ffffff;
-  --line: #d7dace;
-  --stamp: #b23a2e;
-  --stamp-dark: #8f2e24;
-  --stamp-wash: #f6e6e3;
-  --gold: #c99a2e;
-  --gold-wash: #f7edd7;
-
-  --font-display: "Space Grotesk", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-}
-
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 html, body, #root {
-  min-height: 100vh;
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
-  font-family: var(--font-body);
-  background: var(--paper);
-  color: var(--ink);
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(28, 36, 56, 0.06) 1px, transparent 0);
-  background-size: 22px 22px;
+    background: #f6f6f3;
+    color: #1c2438;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
-}
-
-button:focus-visible,
-input:focus-visible,
-a:focus-visible,
-[tabindex]:focus-visible {
-  outline: 2px solid var(--stamp);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
+img {
+    max-width: 100%;
+    display: block;
 }
 
 .loader {
+  --color-1: #090000;
   --size: 1px;
   width: calc(48 * var(--size));
   height: calc(48 * var(--size));
-  border: calc(5 * var(--size)) solid var(--ink);
+  border: calc(5 * var(--size)) solid var(--color-1);
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
-  animation: rotation 0.9s linear infinite;
+  animation: rotation 1s linear infinite;
 }
 
 @keyframes rotation {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
