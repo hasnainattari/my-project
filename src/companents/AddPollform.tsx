@@ -39,6 +39,10 @@ const AddPollform = () => {
             message.error("option 4 is required")
             return
         }
+        if (!currentUser) {
+            message.error("Please wait, loading your account...")
+            return
+        }
 
         try {
             await addDoc(collection(db, "polls"), {
