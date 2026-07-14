@@ -1,7 +1,3 @@
-// all the global states will be made here
-// const [user, set_user] = usestate(null)
-
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
