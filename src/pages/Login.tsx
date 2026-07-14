@@ -83,22 +83,30 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={handleLogin} className="login-form">
-      <h2>Login</h2>
-      <AntdInput placeholder="Enter your email" type="email"
-        onChange={(e: any) => set_email(e.target.value)}
-        value={email}
-      />
-      <PasswordInput placeholder="Enter your password"
-        onChange={(e: any) => set_password(e.target.value)}
-      />
-      <p>
-        Don't have an account?
-        <Link to="/signup"> Signup</Link>
-      </p>
-      <AntdButton text="Login Now" onClick={handleLogin} />
-      <AntdButton text="Continue With Google" onClick={googleLogin} />
-    </form>
+    <div className="auth-screen">
+      <form onSubmit={handleLogin} className="login-form">
+        <span className="eyebrow">Voter access</span>
+        <h2>Welcome back</h2>
+        <p className="subtext">Sign in to cast your vote and open new polls.</p>
+
+        <AntdInput placeholder="Enter your email" type="email"
+          onChange={(e: any) => set_email(e.target.value)}
+          value={email}
+        />
+        <PasswordInput placeholder="Enter your password"
+          onChange={(e: any) => set_password(e.target.value)}
+        />
+        <AntdButton text="Login Now" onClick={handleLogin} />
+
+        <hr className="perforation" />
+
+        <AntdButton text="Continue With Google" onClick={googleLogin} />
+        <p>
+          Don't have an account?
+          <Link to="/signup"> Signup</Link>
+        </p>
+      </form>
+    </div>
   )
 }
 

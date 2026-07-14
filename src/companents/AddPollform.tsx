@@ -95,7 +95,7 @@ const AddPollform = () => {
     return (
         <div>
             <form className="pollingForm">
-                <h2>Create Poll</h2>
+                <h2>Open a new ballot</h2>
 
                 <AntdInput
                     placeholder="Enter your poll question.. "
@@ -124,7 +124,6 @@ const AddPollform = () => {
                     onChange={(e: any) => set_option_4(e.target.value)}
                 />
 
-                <div></div>
                 <AntdButton
                     text="Create Poll"
                     onClick={handleSubmit}

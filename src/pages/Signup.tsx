@@ -83,25 +83,33 @@ const Signup = () => {
   }
 
   return (
-    <form onSubmit={handleSignup} className="login-form">
-      <h2>Signup</h2>
-      <AntdInput placeholder="Enter your email" type="email"
-        onChange={(e: any) => set_email(e.target.value)}
-        value={email}
-      />
-      <PasswordInput placeholder="Enter your password"
-        onChange={(e: any) => set_password(e.target.value)}
-      />
-      <PasswordInput placeholder="Confirm your password"
-        onChange={(e: any) => set_confirm_pass(e.target.value)}
-      />
-      <p>
-        Already have an account?
-        <Link to="/login"> Login</Link>
-      </p>
-      <AntdButton text="Signup Now" onClick={handleSignup} />
-      <AntdButton text="Continue With Google" onClick={googleLogin} />
-    </form>
+    <div className="auth-screen">
+      <form onSubmit={handleSignup} className="login-form">
+        <span className="eyebrow">New voter</span>
+        <h2>Create account</h2>
+        <p className="subtext">Register to open polls and cast your vote.</p>
+
+        <AntdInput placeholder="Enter your email" type="email"
+          onChange={(e: any) => set_email(e.target.value)}
+          value={email}
+        />
+        <PasswordInput placeholder="Enter your password"
+          onChange={(e: any) => set_password(e.target.value)}
+        />
+        <PasswordInput placeholder="Confirm your password"
+          onChange={(e: any) => set_confirm_pass(e.target.value)}
+        />
+        <AntdButton text="Signup Now" onClick={handleSignup} />
+
+        <hr className="perforation" />
+
+        <AntdButton text="Continue With Google" onClick={googleLogin} />
+        <p>
+          Already have an account?
+          <Link to="/login"> Login</Link>
+        </p>
+      </form>
+    </div>
   )
 }
 

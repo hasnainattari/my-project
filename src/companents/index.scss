@@ -1,71 +1,278 @@
+// ---------- Header ----------
 .header {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 1.5em;
+  background: var(--surface);
+  border-bottom: 2px solid var(--ink);
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 1.15em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    span.tag {
+      font-family: var(--font-mono);
+      font-size: 0.65em;
+      color: var(--stamp);
+      border: 1px solid var(--stamp);
+      border-radius: 999px;
+      padding: 0.15em 0.6em;
+      margin-left: 0.4em;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  .who {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+
+    .email-chip {
+      font-family: var(--font-mono);
+      font-size: 0.8em;
+      color: var(--ink-soft);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.35em 0.9em;
+    }
+
+    button {
+      width: auto !important;
+    }
+  }
+}
+
+// ---------- New poll (ballot) form ----------
+.pollingForm {
+  position: relative;
+  padding: 1.75em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.5em;
+  margin: 1.5em;
+  max-width: 900px;
+  margin-inline: auto;
+  margin-top: 1.5em;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--stamp);
+    border-radius: 0.5em 0.5em 0 0;
+  }
+
+  h2 {
+    grid-column: span 2;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.15em;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 0.55em;
+      height: 0.55em;
+      background: var(--stamp);
+      border-radius: 50%;
+    }
+  }
+
+  .questionInput {
+    grid-column: span 2;
+  }
+
+  > button, > .ant-btn {
+    grid-column: span 2;
+  }
+}
+
+// ---------- Ballot stub (single poll) ----------
+.singlePoll {
+  position: relative;
+  margin: 1.25em;
+  max-width: 900px;
+  margin-inline: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.5em;
+  padding: 1.5em 1.5em 1.25em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+
+  .stub-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1em;
+
+    p.question {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.1em;
+      color: var(--ink);
+      flex: 1;
+    }
+
+    b {
+      font-family: var(--font-mono);
+      color: var(--muted);
+      font-size: 0.75em;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+  }
+
+  .perforation {
+    border: none;
+    border-top: 2px dashed var(--line);
+    margin: 0.2em 0 0.4em;
+  }
+
+  .stub-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5em 1em;
-    border-bottom: 1px solid #dadada;
-
-    div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1em;
-    }
-}
-
-.pollingForm {
-    padding: 1em;
-    // background-color: red;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1em;
-    border: 1px solid #dadada;
-    border-radius: 1em;
-    margin: 1em;
-
-    .questionInput {
-        grid-column: span 2;
-    }
-}
-
-.singlePoll {
-    margin: 1em;
-    border: 1px solid #dadada;
-    border-radius: 1em;
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-
-    b {
-        color: #909090;
-        width: 100%;
-        text-align: right;
-        font-size: 0.8em;
-    }
+    margin-top: 0.3em;
 
     h5 {
-        color: #909090;
-        font-size: 0.8em;
+      font-family: var(--font-mono);
+      color: var(--muted);
+      font-size: 0.75em;
+      font-weight: 400;
     }
+
+    button {
+      width: auto !important;
+    }
+  }
 }
 
 .antd-progress {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #F0F0F0;
-    background-color: #F0F0F0;
-    border-radius: 1em;
-    padding: 0.5em;
-    gap: 0.3em;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 0.4em;
+  padding: 0.55em 0.9em;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    border-color: var(--stamp);
+    background: var(--stamp-wash);
+  }
+
+  &.voted {
+    border-color: var(--gold);
+    background: var(--gold-wash);
+  }
+
+  .stamp-dot {
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+    border-radius: 50%;
+    border: 2px solid var(--ink-soft);
+    background: transparent;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  &.voted .stamp-dot {
+    background: var(--stamp);
+    border-color: var(--stamp);
+  }
+
+  .progress-body {
+    flex: 1;
+
+    p {
+      font-family: var(--font-body);
+      font-size: 0.85em;
+      color: var(--ink);
+      margin-bottom: 0.3em;
+      display: flex;
+      justify-content: space-between;
+
+      .pct {
+        font-family: var(--font-mono);
+        color: var(--muted);
+      }
+    }
+  }
 }
 
 .ant-progress-rail {
-    background-color: #F0F0F0 !important;
+  background-color: var(--line) !important;
+}
+
+.ant-progress-bg {
+  background: var(--ink) !important;
+}
+
+.voted .ant-progress-bg {
+  background: var(--stamp) !important;
 }
 
 .ant-progress-body {
-    width: 100% !important;
+  width: 100% !important;
+}
+
+.ant-progress-text {
+  font-family: var(--font-mono) !important;
+}
+
+// Buttons everywhere, restyled off the antd default
+.ant-btn.ant-btn-color-primary.ant-btn-variant-solid {
+  font-family: var(--font-body);
+  font-weight: 500;
+  background: var(--ink) !important;
+  border: none !important;
+  border-radius: 0.35em;
+  height: 2.5em;
+
+  &:hover {
+    background: var(--stamp) !important;
+  }
+}
+
+.ant-btn.ant-btn-color-danger.ant-btn-variant-solid {
+  font-family: var(--font-body);
+  font-weight: 500;
+  background: var(--surface) !important;
+  color: var(--stamp) !important;
+  border: 1px solid var(--stamp) !important;
+  border-radius: 0.35em;
+  height: 2.5em;
+
+  &:hover {
+    background: var(--stamp-wash) !important;
+  }
 }
