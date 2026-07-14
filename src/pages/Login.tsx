@@ -3,13 +3,14 @@ import { AntdButton } from "../companents/AntdButton"
 import { AntdInput } from "../companents/AntdInput"
 import { PasswordInput } from "../companents/PasswordInput"
 import "./index.scss"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { message } from "antd"
 import {
   getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithRedirect,
+  getRedirectResult
 } from "firebase/auth";
 import { useDispatch } from "react-redux"
 import { login } from "../redux/state"
@@ -20,6 +21,26 @@ const Login = () => {
 
   const [email, set_email] = useState("")
   const [password, set_password] = useState("")
+
+  useEffect(() => {
+    const auth = getAuth();
+    getRedirectResult(auth)
+      .then((result: any) => {
+        if (result && result.user) {
+          const userData = {
+            email: result.user.email,
+            uid: result.user.uid,
+          }
+          dispatch(login(userData))
+          message.success("google login successfull")
+          navigate("/")
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        message.error(error.message.replace("Firebase: Error", ""))
+      });
+  }, [])
 
   const handleLogin = (e: any) => {
     e.preventDefault()
@@ -58,19 +79,7 @@ const Login = () => {
   const googleLogin = () => {
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
-    signInWithPopup(auth, provider)
-      .then((result: any) => {
-        const userData = {
-          email: result.user.email,
-          uid: result.user.uid,
-        }
-        dispatch(login(userData))
-        message.success("google login successfull")
-        navigate("/")
-      }).catch((error) => {
-        console.error(error)
-        message.error(error.message.replace("Firebase: Error", ""))
-      });
+    signInWithRedirect(auth, provider);
   }
 
   return (

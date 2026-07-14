@@ -3,13 +3,14 @@ import { AntdButton } from "../companents/AntdButton"
 import { AntdInput } from "../companents/AntdInput"
 import { PasswordInput } from "../companents/PasswordInput"
 import "./index.scss"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { message } from "antd"
 import {
   getAuth,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithRedirect,
+  getRedirectResult
 } from "firebase/auth";
 import { login } from "../redux/state"
 import { useDispatch } from "react-redux"
@@ -21,6 +22,26 @@ const Signup = () => {
   const [email, set_email] = useState("")
   const [password, set_password] = useState("")
   const [confirm_pass, set_confirm_pass] = useState("")
+
+  useEffect(() => {
+    const auth = getAuth();
+    getRedirectResult(auth)
+      .then((result: any) => {
+        if (result && result.user) {
+          const userData = {
+            email: result.user.email,
+            uid: result.user.uid,
+          }
+          dispatch(login(userData))
+          message.success("google login successfull")
+          navigate("/")
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        message.error(error.message.replace("Firebase: Error", ""))
+      });
+  }, [])
 
   const handleSignup = (e: any) => {
     e.preventDefault()
@@ -55,23 +76,10 @@ const Signup = () => {
 
   }
 
-  const provider = new GoogleAuthProvider();
-  const auth = getAuth();
   const googleLogin = () => {
-    signInWithPopup(auth, provider)
-      .then((result: any) => {
-        console.log(result)
-        message.success("google login successfull")
-        const userData = {
-          email: result.user.email,
-          uid: result.user.uid,
-        }
-        dispatch(login(userData))
-        navigate("/")
-      }).catch((error) => {
-        console.error(error)
-        message.error(error.message.replace("Firebase: Error", ""))
-      });
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    signInWithRedirect(auth, provider);
   }
 
   return (
