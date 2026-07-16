@@ -1,40 +1,25 @@
-import { useState } from "react"
 import { useSelector } from "react-redux"
 import { AntdButton } from "./AntdButton"
 import AntdProgress from "./AntdProgress"
 import "./index.scss"
 import moment from 'moment'
-import { doc, deleteDoc, updateDoc, getDoc, arrayUnion } from "firebase/firestore";
+import { doc, deleteDoc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase"
 import { message } from "antd"
 
-const OPTION_KEYS = ["opt_1_votes", "opt_2_votes", "opt_3_votes", "opt_4_votes"]
-
 const SinglePoll = ({ data, getPolls }: any) => {
     const currentUser = useSelector((state: any) => state.user)
-    const [isVoting, setIsVoting] = useState(false)
-    const [isDeleting, setIsDeleting] = useState(false)
 
     const handleDelete = async (id: string) => {
-        if (isDeleting) return
-        setIsDeleting(true)
         try {
             await deleteDoc(doc(db, "polls", id));
-            message.success("Poll deleted")
+            message.success("Poll Deleted")
             getPolls()
         } catch (error) {
             console.error(error)
             message.error("Error in deleting poll")
-        } finally {
-            setIsDeleting(false)
         }
     }
-
-    // Which option (if any) the current user has already voted for
-    const votedOptionKey = OPTION_KEYS.find((key) =>
-        currentUser?.email ? (data[key] || []).includes(currentUser.email) : false
-    )
-    const hasVotedAlready = Boolean(votedOptionKey)
 
     const handleOptionClick = async (option: string, pollId: string) => {
         const userEmail = currentUser?.email
@@ -43,64 +28,40 @@ const SinglePoll = ({ data, getPolls }: any) => {
             return
         }
 
-        if (hasVotedAlready) {
-            message.error("You have already voted on this poll")
-            return
-        }
+        const docRef = doc(db, "polls", pollId);
+        const docSnap = await getDoc(docRef);
+        const latestPollFromFirebase: any = docSnap.data()
 
-        if (isVoting) return
-        setIsVoting(true)
+        const allVotes = [
+            ...latestPollFromFirebase.opt_1_votes,
+            ...latestPollFromFirebase.opt_2_votes,
+            ...latestPollFromFirebase.opt_3_votes,
+            ...latestPollFromFirebase.opt_4_votes,
+        ]
 
-        try {
-            const docRef = doc(db, "polls", pollId);
-            const docSnap = await getDoc(docRef);
+        if (allVotes.includes(userEmail)) {
+            message.error("you have already voted")
 
-            if (!docSnap.exists()) {
-                message.error("This poll no longer exists")
-                return
-            }
+        } else {
+            const updatedPoll: any = latestPollFromFirebase
+            updatedPoll[option] = [...latestPollFromFirebase[option], userEmail]
 
-            const latestPoll: any = docSnap.data()
-
-            const allVotes = OPTION_KEYS.flatMap((key) => latestPoll[key] || [])
-
-            if (allVotes.includes(userEmail)) {
-                message.error("You have already voted on this poll")
+            try {
+                await setDoc(doc(db, "polls", pollId), updatedPoll);
+                message.success("Vote Done")
                 getPolls()
-                return
+            } catch (error) {
+                console.error(error)
+                message.error("Error in casting vote")
             }
-
-            // Atomic, additive update — never overwrites the whole document,
-            // so concurrent votes from other users are never lost, and the
-            // percentages always reflect the true, latest vote counts.
-            await updateDoc(docRef, {
-                [option]: arrayUnion(userEmail)
-            });
-
-            message.success("Vote recorded")
-            getPolls()
-        } catch (error) {
-            console.error(error)
-            message.error("Error while voting, please try again")
-        } finally {
-            setIsVoting(false)
         }
+
     }
 
     const votesFor = (key: string) => (data[key]?.length || 0)
-    const totalVotes = OPTION_KEYS.reduce((sum, key) => sum + votesFor(key), 0)
-    // Keep full precision for the bar width so it always lines up with the
-    // real proportion of votes, and only round for the number shown as text.
-    const percentFor = (key: string) => totalVotes === 0 ? 0 : (votesFor(key) / totalVotes) * 100
-    const displayPercentFor = (key: string) => Math.round(percentFor(key))
-    const hasVotedFor = (key: string) => currentUser?.email ? (data[key] || []).includes(currentUser.email) : false
-
-    const options = [
-        { key: "opt_1_votes", text: data.option_1 },
-        { key: "opt_2_votes", text: data.option_2 },
-        { key: "opt_3_votes", text: data.option_3 },
-        { key: "opt_4_votes", text: data.option_4 },
-    ]
+    const totalVotes = votesFor("opt_1_votes") + votesFor("opt_2_votes") + votesFor("opt_3_votes") + votesFor("opt_4_votes")
+    const percentFor = (key: string) => totalVotes === 0 ? 0 : Math.round((votesFor(key) / totalVotes) * 100)
+    const hasVotedFor = (key: string) => currentUser?.email ? data[key]?.includes(currentUser.email) : false
 
     return (
         <div className="singlePoll">
@@ -111,26 +72,40 @@ const SinglePoll = ({ data, getPolls }: any) => {
 
             <hr className="perforation" />
 
-            <div className="options-list">
-                {options.map(({ key, text }) => (
-                    <AntdProgress
-                        key={key}
-                        text={text}
-                        percent={percentFor(key)}
-                        displayPercent={displayPercentFor(key)}
-                        count={votesFor(key)}
-                        voted={hasVotedFor(key)}
-                        disabled={hasVotedAlready || isVoting}
-                        onClick={() => handleOptionClick(key, data.id)}
-                    />
-                ))}
-            </div>
+            <AntdProgress
+                text={data.option_1}
+                percent={percentFor("opt_1_votes")}
+                count={votesFor("opt_1_votes")}
+                voted={hasVotedFor("opt_1_votes")}
+                onClick={() => handleOptionClick("opt_1_votes", data.id)}
+            />
+            <AntdProgress
+                text={data.option_2}
+                percent={percentFor("opt_2_votes")}
+                count={votesFor("opt_2_votes")}
+                voted={hasVotedFor("opt_2_votes")}
+                onClick={() => handleOptionClick("opt_2_votes", data.id)}
+            />
+            <AntdProgress
+                text={data.option_3}
+                percent={percentFor("opt_3_votes")}
+                count={votesFor("opt_3_votes")}
+                voted={hasVotedFor("opt_3_votes")}
+                onClick={() => handleOptionClick("opt_3_votes", data.id)}
+            />
+            <AntdProgress
+                text={data.option_4}
+                percent={percentFor("opt_4_votes")}
+                count={votesFor("opt_4_votes")}
+                voted={hasVotedFor("opt_4_votes")}
+                onClick={() => handleOptionClick("opt_4_votes", data.id)}
+            />
 
             <div className="stub-footer">
                 <h5>{moment(data.createdAt).fromNow()} · {totalVotes} vote{totalVotes === 1 ? "" : "s"} total</h5>
 
                 {currentUser?.email === data.userEmail ? <AntdButton
-                    text={isDeleting ? "Deleting..." : "Delete"}
+                    text="Delete"
                     onClick={() => handleDelete(data.id)}
                     color="danger"
                 /> : null}
